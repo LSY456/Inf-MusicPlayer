@@ -1,0 +1,21 @@
+#ifndef AUDIOMETADATA_H
+#define AUDIOMETADATA_H
+
+#include <QString>
+#include <QByteArray>
+
+struct AudioMetaData
+{
+    QString filePath;  // 文件路径
+    QString artist;    // 艺术家
+    QString title;    // 歌名
+    QString album;    // 专辑
+    QString duration; // 新增：时长
+    int bitrate = 0;  // 新增：比特率
+    QByteArray coverArt; // 专辑封面数据
+    QString mimeType;  // 图片MIME类型
+};
+
+#endif // AUDIOMETADATA_H
+
+

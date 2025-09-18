@@ -1,0 +1,64 @@
+#include "metadataparser.h"
+
+// TagLib 头文件
+#include <taglib/fileref.h>
+#include <taglib/tag.h>
+#include <taglib/id3v2tag.h>
+#include <taglib/mpegfile.h>
+#include <taglib/attachedpictureframe.h>
+#include <taglib/flacfile.h>
+#include <taglib/flacpicture.h>
+#include <taglib/tpropertymap.h>
+
+//matadataparser::matadataparser()
+//{
+
+    
+    
+//}
+
+// 解析元数据函数
+MusicMetadata matadataparser::extractMetadata(const QString &filePath) {
+    MusicMetadata data;
+    TagLib::FileRef fileRef(filePath.toUtf8().constData());
+
+    if (!fileRef.isNull() && fileRef.tag()) {
+        TagLib::Tag *tag = fileRef.tag();
+        data.title = QString::fromStdString(tag->title().to8Bit(true));
+        data.artist = QString::fromStdString(tag->artist().to8Bit(true));
+        data.album = QString::fromStdString(tag->album().to8Bit(true));
+        data.genre = QString::fromStdString(tag->genre().to8Bit(true));
+        data.year = tag->year();
+        data.track = tag->track();
+
+        // 解析时长和音频属性
+        if (fileRef.audioProperties()) {
+            TagLib::AudioProperties *props = fileRef.audioProperties();
+            data.duration = props->lengthInSeconds();
+            data.bitrate = props->bitrate();
+            data.sampleRate = props->sampleRate();
+        }
+
+        // 解析封面（MP3/FLAC）
+        if (filePath.endsWith(".mp3")) {
+            auto *mpegFile = dynamic_cast<TagLib::MPEG::File*>(fileRef.file());
+            if (mpegFile && mpegFile->ID3v2Tag()) {
+                auto frames = mpegFile->ID3v2Tag()->frameList("APIC");
+                if (!frames.isEmpty()) {
+                    auto *frame = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame*>(frames.front());
+                    QByteArray imgData(frame->picture().data(), frame->picture().size());
+                    data.cover = QImage::fromData(imgData);
+                }
+            }
+        } else if (filePath.endsWith(".flac")) {
+            auto *flacFile = dynamic_cast<TagLib::FLAC::File*>(fileRef.file());
+            if (flacFile && !flacFile->pictureList().isEmpty()) {
+                auto *picture = flacFile->pictureList().front();
+                QByteArray imgData(picture->data().data(), picture->data().size());
+                data.cover = QImage::fromData(imgData);
+            }
+        }
+    }
+
+    return data;
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+ <g fill="none" stroke="#fff" stroke-width="2">
+  <path d="m6 10h4c2 0 4 2 4 4"/>
+  <path d="m6 22h4c2 0 4-2 4-4"/>
+  <path d="m18 14c0-2 2-4 4-4h4"/>
+  <path d="m18 18c0 2 2 4 4 4h4"/>
+  <path d="m22 6 4 4-4 4"/>
+  <path d="m22 18 4 4-4 4"/>
+ </g>
+</svg>

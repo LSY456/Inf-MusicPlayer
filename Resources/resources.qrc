@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>sequential.svg</file>
+        <file>loop.svg</file>
+        <file>single-loop.svg</file>
+        <file>random.svg</file>
+        <file>player.svg</file>
+    </qresource>
+</RCC> 
